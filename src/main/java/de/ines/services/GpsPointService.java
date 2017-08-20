@@ -10,6 +10,12 @@ import de.ines.domain.Route;
 import de.ines.repositories.GpsPointRepository;
 import de.ines.repositories.RouteRepository;
 import de.ines.repositories.UserRepository;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,14 +43,43 @@ public class GpsPointService {
     public void saveGpsPoint(GpsPoint gpsPoint){
         //gpsPointRepository.insertGPSPoint(gpsPoint.acceleration,gpsPoint.latitude, gpsPoint.longitude, gpsPoint.heading,gpsPoint.speed,gpsPoint.date,1);
         //gpsPointRepository.save(gpsPoint);
-        gpsPointRepository.save(new GpsPoint(gpsPoint.getDate(),
+        /*gpsPointRepository.save(new GpsPoint(gpsPoint.getDate(),
                 gpsPoint.getLatitude(),
                 gpsPoint.getLongitude(),
                 gpsPoint.getHeading(),
                 gpsPoint.getSpeed(),
                 gpsPoint.getAcceleration(),
                 wktToGeometry("POINT("+gpsPoint.getLatitude()+" "+gpsPoint.getLongitude()+")"),
-                gpsPoint.getRoute(),1));
+                gpsPoint.getRoute(),1));*/
+
+        String querystring = "INSERT INTO gps_point (location, latitude, longitude, heading, speed, acceleration, date, route_id)"
+                + "VALUES ("+
+                "ST_SetSRID(ST_MakePoint("+gpsPoint.latitude+", "+gpsPoint.longitude+"), 4326),"+
+                gpsPoint.latitude+", "+
+                gpsPoint.longitude+", "+
+                gpsPoint.heading+", "+
+                gpsPoint.speed+", "+
+                gpsPoint.acceleration+", "+
+                gpsPoint.date+", "+
+                gpsPoint.route.id
+                +")";
+
+        Configuration config = new Configuration();
+        config.configure();
+        SessionFactory sessionFactory = config.buildSessionFactory();
+
+        //Current Session - no need to close
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        //open new session
+        Session newSession = sessionFactory.openSession();
+        //perform db operations
+
+        Query q = newSession.createSQLQuery(querystring);
+        q.executeUpdate();
+
+        //close session
+        newSession.close();
     }
 
     public Geometry wktToGeometry(String wktPoint) {

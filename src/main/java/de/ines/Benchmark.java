@@ -139,32 +139,35 @@ public class Benchmark {
         int distance = 0;
         long overallTime = 0;
 
-        Random random = new Random();
-        latitude = random.nextDouble();
-        longitude = random.nextDouble();
-        distance = random.nextInt(400);
+        for(int i = 0; i < 5000; i++) {
+            Random random = new Random();
+            latitude = random.nextDouble();
+            longitude = random.nextDouble();
+            distance = random.nextInt(400);
 
-        String stmt = "SELECT\n" +
-                "  latitude, \n" +
-                "  longitude,\n" +
-                "  date,\n" +
-                "  route_id,\n" +
-                "  ST_DISTANCE(location, ST_SetSRID(ST_POINT("+latitude+", "+longitude+"), 4326), true) as dist \n" +
-                "FROM gps_point\n" +
-                "ORDER BY location <-> ST_SetSRID(ST_POINT("+latitude+", "+longitude+"), 4326)\n" +
-                "LIMIT 1;";
-        ResultSet rs = exe_stmt.executeQuery(stmt);
+            String stmt = "SELECT\n" +
+                    "  latitude, \n" +
+                    "  longitude,\n" +
+                    "  date,\n" +
+                    "  route_id,\n" +
+                    "  ST_DISTANCE(location, ST_SetSRID(ST_POINT(" + latitude + ", " + longitude + "), 4326), true) as dist \n" +
+                    "FROM gps_point\n" +
+                    "ORDER BY location <-> ST_SetSRID(ST_POINT(" + latitude + ", " + longitude + "), 4326)\n" +
+                    "LIMIT 1;";
+            ResultSet rs = exe_stmt.executeQuery(stmt);
 
-        System.out.println("Search nearest point of latitude: "+latitude+" and longitude: "+longitude);
-        while (rs.next()) {
-            Double lat = rs.getDouble("latitude");
-            Double lng = rs.getDouble("longitude");
-            Long time = rs.getLong("date");
-            System.out.println(lat + "\t" + lng + "\t" + time);
+            System.out.println("Search nearest point of latitude: " + latitude + " and longitude: " + longitude);
+            while (rs.next()) {
+                Double lat = rs.getDouble("latitude");
+                Double lng = rs.getDouble("longitude");
+                Long time = rs.getLong("date");
+                System.out.println(lat + "\t" + lng + "\t" + time);
+            }
+
+            Date endTime = new Date();
+            overallTime += (endTime.getTime() - startTime.getTime());
         }
 
-        Date endTime = new Date();
-        overallTime+= (endTime.getTime()-startTime.getTime());
         System.out.println((double)overallTime/1000);
 
         c.setAutoCommit(false);
