@@ -68,9 +68,6 @@ public class GpsPointService {
         config.configure();
         SessionFactory sessionFactory = config.buildSessionFactory();
 
-        //Current Session - no need to close
-        Session currentSession = sessionFactory.getCurrentSession();
-
         //open new session
         Session newSession = sessionFactory.openSession();
         //perform db operations

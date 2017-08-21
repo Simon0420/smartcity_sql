@@ -17,7 +17,6 @@ import java.util.UUID;
 public class Benchmark {
 
     public void storageBenchmark() throws Exception {
-
         Connection c = null;
         Statement exe_stmt = null;
         Class.forName("org.postgresql.Driver");
@@ -38,7 +37,7 @@ public class Benchmark {
         String uniqueID="";
         int routeID = 0;
 
-        int maxPointsProcessed = 500000;
+        int maxPointsProcessed = 1;
         long overallTime = 0;
 
         ArrayList<String> user_stmnts = new ArrayList<>();
@@ -139,7 +138,7 @@ public class Benchmark {
         int distance = 0;
         long overallTime = 0;
 
-        for(int i = 0; i < 5000; i++) {
+        for(int i = 0; i < 1; i++) {
             Random random = new Random();
             latitude = random.nextDouble();
             longitude = random.nextDouble();
