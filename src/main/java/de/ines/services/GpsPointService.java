@@ -23,6 +23,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class GpsPointService {
@@ -130,5 +131,8 @@ public class GpsPointService {
         return "Succesfull";
     }
 
+    public Iterable<Map<String,Object>> withinDistanceCall(double latitude, double longitude, int distance){
+        return gpsPointRepository.withinDistanceCall(latitude, longitude, distance);
+    }
 
 }

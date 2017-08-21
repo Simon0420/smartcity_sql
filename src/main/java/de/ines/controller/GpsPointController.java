@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @RestController
 public class GpsPointController {
@@ -16,14 +17,14 @@ public class GpsPointController {
         this.gpsPointService = gpsPointService;
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.GET)
-    public int getGPS_PlusByRealID(@RequestParam("id") String id){
-        return 10;
-    }
-
     @RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
     public String saveRoute(@RequestBody String jsonRoute){
         return gpsPointService.saveRoute(jsonRoute);
+    }
+
+    @RequestMapping(value="/withinDistanceCall", method = RequestMethod.GET)
+    public Iterable<Map<String,Object>> withinDistanceCall(@RequestParam(value="latitude")double latitude, @RequestParam(value="longitude")double longitude, @RequestParam(value="distance")int distance){
+        return gpsPointService.withinDistanceCall(latitude, longitude, distance);
     }
 
 }
