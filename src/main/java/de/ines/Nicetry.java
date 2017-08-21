@@ -49,9 +49,9 @@ public class Nicetry {
                 uniqueID = latitude+longitude+date+heading+speed+acceleration+"";
 
                 if (i < routeLength - 1) {
-                    input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +",\"uniqueID\":\""+uniqueID+ "\"},";
+                    input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +" },";
                 } else {
-                    input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +",\"uniqueID\":\""+uniqueID+ "\"}],\"routeID\":"+routeID+"}";
+                    input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +"}]}";
 
                 }
 
@@ -60,7 +60,7 @@ public class Nicetry {
             try {
                 //System.out.println(input);
 
-                URL url = new URL("http://localhost:5434/" + name + "/saveRoute");
+                URL url = new URL("http://localhost:5434/saveRoute");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("POST");
@@ -118,9 +118,9 @@ public class Nicetry {
             uniqueID = UUID.randomUUID().toString();
 
             if (i < maxPointsProcessed - 1) {
-                input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +",\"uniqueID\":\""+uniqueID+ "\"},";
+                input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +"},";
             } else {
-                input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +",\"uniqueID\":\""+uniqueID+ "\"}],\"routeID\":"+routeID+"}";
+                input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +"}]}";
 
             }
 
@@ -129,7 +129,7 @@ public class Nicetry {
         try {
             //System.out.println(input);
 
-            URL url = new URL("http://localhost:5434/" + name + "/saveRoute");
+            URL url = new URL("http://localhost:5434/saveRoute");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");

@@ -19,7 +19,7 @@ public class Route implements Serializable {
 
     @Transient
     public GpsPoint[] route;
-
+    
     @Column(nullable = true)
     public int realID;
 

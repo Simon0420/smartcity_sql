@@ -62,7 +62,7 @@ public class GpsPointService {
                 gpsPoint.speed+", "+
                 gpsPoint.acceleration+", "+
                 gpsPoint.date+", "+
-                gpsPoint.route.id
+                1
                 +")";
 
         Configuration config = new Configuration();
@@ -114,15 +114,17 @@ public class GpsPointService {
         }
         route.setUser(user);
         userRepository.save(user);
+        Route newR = routeRepository.save(route);
+
         long id = 0;
-        if(routeRepository.save(route).id != null){
-            id = routeRepository.save(route).id;
+        if(newR.id != null){
+            id = newR.id;
         }else{
             id = 0;
         }
         for(int i = 0; i < route.getRoute().length; i++){
             GpsPoint p = route.getRoute()[i];
-            p.setRoute(route);
+            p.setRoute(newR);
             saveGpsPoint(p);
         }
 
