@@ -37,6 +37,11 @@ public class GpsPointService {
     @Autowired
     UserRepository userRepository;
 
+    Configuration config;
+    SessionFactory sessionFactory;
+    Session session;
+
+
     public GpsPoint searchGpsPointByRealID(int id){
         return gpsPointRepository.findByRealID(id);
     }
@@ -65,19 +70,10 @@ public class GpsPointService {
                 1
                 +")";
 
-        Configuration config = new Configuration();
-        config.configure();
-        SessionFactory sessionFactory = config.buildSessionFactory();
 
-        //open new session
-        Session newSession = sessionFactory.openSession();
         //perform db operations
-
-        Query q = newSession.createSQLQuery(querystring);
+        Query q = session.createSQLQuery(querystring);
         q.executeUpdate();
-
-        //close session
-        newSession.close();
     }
 
     public Geometry wktToGeometry(String wktPoint) {
@@ -93,6 +89,16 @@ public class GpsPointService {
     }
 
     public String saveRoute(String jsonRoute){
+        if(this.session == null || !this.session.isOpen()) {
+            Configuration config = new Configuration();
+            config.configure();
+            SessionFactory sessionFactory = config.buildSessionFactory();
+
+            //open new session
+            Session newSession = sessionFactory.openSession();
+            this.session = newSession;
+        }
+
         Date startTime = new Date();
 
         AppUser user = userRepository.findByName("user");
@@ -130,6 +136,10 @@ public class GpsPointService {
 
         Date endTime = new Date();
         System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);
+
+        //close session
+        session.close();
+
         return "Succesfull";
     }
 
