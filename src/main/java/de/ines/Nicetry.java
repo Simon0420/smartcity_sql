@@ -191,7 +191,7 @@ public class Nicetry {
 
         //System.out.println(input);
 
-        URL url = new URL("http://localhost:5434/withinDistanceCall?latitude="+latitude+"&longitude="+longitude+"&distance="+distance);
+        URL url = new URL("http://localhost:5434/withinDistanceCall?latitude="+latitude+"&longitude="+longitude);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         // optional default is GET
@@ -232,7 +232,7 @@ public class Nicetry {
 
         bench.storageBenchmark();
         try {
-            //bench.distanceBenchmark();
+            bench.distanceBenchmark();
         }catch(Exception e){
 
         }

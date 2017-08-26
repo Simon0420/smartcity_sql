@@ -23,6 +23,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -90,13 +91,12 @@ public class GpsPointService {
 
     public String saveRoute(String jsonRoute){
         if(this.session == null || !this.session.isOpen()) {
-            Configuration config = new Configuration();
-            config.configure();
-            SessionFactory sessionFactory = config.buildSessionFactory();
-
-            //open new session
-            Session newSession = sessionFactory.openSession();
-            this.session = newSession;
+            if(session == null){
+                Configuration config = new Configuration();
+                config.configure();
+                SessionFactory sessionFactory = config.buildSessionFactory();
+                this.session = sessionFactory.openSession();
+            }
         }
 
         Date startTime = new Date();
@@ -138,13 +138,13 @@ public class GpsPointService {
         System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);
 
         //close session
-        session.close();
+        //session.close();
 
         return "Succesfull";
     }
 
-    public Iterable<Map<String,Object>> withinDistanceCall(double latitude, double longitude, int distance){
-        return gpsPointRepository.withinDistanceCall(latitude, longitude, distance);
+    public List<GpsPoint> withinDistanceCall(double latitude, double longitude){
+        return gpsPointRepository.withinDistanceCall(latitude, longitude);
     }
 
 }

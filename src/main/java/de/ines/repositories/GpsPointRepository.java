@@ -8,6 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,10 +26,12 @@ public interface GpsPointRepository extends CrudRepository<GpsPoint, Long> {
             "  latitude," +
             "  longitude," +
             "  date," +
-            "  route_id," +
-            "  ST_DISTANCE(location, ST_SetSRID(ST_POINT({latitude}, {longitude}), 4326), true) as dist " +
+            "  route_id " +
             "FROM gps_point " +
-            "ORDER BY location <-> ST_SetSRID(ST_POINT({latitude}, {longitude}), 4326) " +
-            "LIMIT 1;", nativeQuery = true)
-    Iterable<Map<String,Object>> withinDistanceCall(@Param("latitude")double latitude, @Param("longitude")double longitude, @Param("distance")int distance);
+            "ORDER BY location <-> ST_SetSRID(ST_POINT(:latitude, :longitude), 4326) " +
+            "LIMIT 2;", nativeQuery = true)
+    List<GpsPoint> withinDistanceCall(@Param("latitude")double latitude, @Param("longitude")double longitude);
+    /*
+    "  ST_DISTANCE(location, ST_SetSRID(ST_POINT(:latitude, :longitude), 4326), true) as dist " +
+    */
 }
