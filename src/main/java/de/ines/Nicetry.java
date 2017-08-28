@@ -232,7 +232,7 @@ public class Nicetry {
 
         bench.storageBenchmark();
         try {
-            bench.distanceBenchmark();
+            //bench.distanceBenchmark();
         }catch(Exception e){
 
         }

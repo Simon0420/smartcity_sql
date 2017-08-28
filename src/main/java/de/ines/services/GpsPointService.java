@@ -94,7 +94,10 @@ public class GpsPointService {
             if(session == null){
                 Configuration config = new Configuration();
                 config.configure();
-                SessionFactory sessionFactory = config.buildSessionFactory();
+                this.sessionFactory = config.buildSessionFactory();
+                this.session = sessionFactory.openSession();
+            }
+            if(!session.isOpen()){
                 this.session = sessionFactory.openSession();
             }
         }
@@ -138,7 +141,7 @@ public class GpsPointService {
         System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);
 
         //close session
-        //session.close();
+        session.close();
 
         return "Succesfull";
     }
