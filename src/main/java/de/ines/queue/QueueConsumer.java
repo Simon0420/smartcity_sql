@@ -21,7 +21,7 @@ public class QueueConsumer {
         topicName = "ines:topic";
         props = new Properties();
 
-        props.put("bootstrap.servers", "localhost:5434");
+        props.put("bootstrap.servers", "localhost:2181");
         props.put("group.id", "test");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");

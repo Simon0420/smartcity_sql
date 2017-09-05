@@ -22,7 +22,7 @@ public class QueueProducer {
         props = new Properties();
 
         //Assign localhost id
-        props.put("bootstrap.servers", "localhost:5434");
+        props.put("bootstrap.servers", "localhost:2181");
 
         //Set acknowledgements for producer requests.
         props.put("acks", "all");
