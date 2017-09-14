@@ -1,4 +1,4 @@
-package de.ines.queue;
+package de.ines.queueAlternative;
 
 import org.slf4j.Logger;
 

@@ -1,5 +1,6 @@
 package de.ines.queue;
 
+import de.ines.services.GpsPointService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -15,6 +16,7 @@ public class QueueConsumer {
     Properties props;
     String topicName;
     KafkaConsumer<String, String> consumer;
+    GpsPointService gpsPointService = new GpsPointService();
 
     public QueueConsumer() {
 
@@ -40,11 +42,18 @@ public class QueueConsumer {
         System.out.println("Subscribed to topic " + topicName);
     }
 
+    public void consumingRoutes(){
+        while (true) {
+            ConsumerRecords<String, String> records = consumer.poll(100);
+            for (ConsumerRecord<String, String> record : records)
+                gpsPointService.saveRoute(record.value());
+        }
+    }
+
     public void consuming(){
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records)
-
                 // print the offset,key and value for the consumer records.
                 System.out.printf("offset = %d, key = %s, value = %s\n",
                         record.offset(), record.key(), record.value());

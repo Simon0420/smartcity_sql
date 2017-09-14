@@ -49,10 +49,16 @@ public class QueueProducer {
     }
 
     public void producingTest(){
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; i++) {
             producer.send(new ProducerRecord<String, String>(topicName,
                     Integer.toString(i), Integer.toString(i)));
-        System.out.println("Message sent successfully");
+            System.out.println("Message sent successfully");
+        }
+    }
+
+    public void produceNewRoute(String json){
+        producer.send(new ProducerRecord<String, String>(topicName,
+                json, json));
     }
 
     public void close(){
