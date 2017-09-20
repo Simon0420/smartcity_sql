@@ -16,13 +16,13 @@ public class QueueProducer {
     String topicName;
 
     public QueueProducer(){
-        topicName = "inestopic";
+        topicName = "test";
 
         // create instance for properties to access producer configs
         props = new Properties();
 
         //Assign localhost id
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "localhost:2181");
 
         //Set acknowledgements for producer requests.
         props.put("acks", "all");
