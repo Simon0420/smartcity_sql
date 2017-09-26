@@ -1,4 +1,4 @@
-package de.ines.queue;
+package deprecated.queue;
 
 import de.ines.services.GpsPointService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

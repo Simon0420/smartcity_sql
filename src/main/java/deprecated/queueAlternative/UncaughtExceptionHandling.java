@@ -1,4 +1,4 @@
-package de.ines.queueAlternative;
+package deprecated.queueAlternative;
 
 import org.slf4j.Logger;
 

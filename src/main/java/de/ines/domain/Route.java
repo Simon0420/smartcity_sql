@@ -48,4 +48,12 @@ public class Route implements Serializable {
     public void setRealID(int realID) {
         this.realID = realID;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

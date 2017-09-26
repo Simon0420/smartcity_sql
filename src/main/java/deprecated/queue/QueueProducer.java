@@ -1,4 +1,4 @@
-package de.ines.queue;
+package deprecated.queue;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -22,7 +22,7 @@ public class QueueProducer {
         props = new Properties();
 
         //Assign localhost id
-        props.put("bootstrap.servers", "localhost:2181");
+        props.put("bootstrap.servers", "localhost:9092");
 
         //Set acknowledgements for producer requests.
         props.put("acks", "all");

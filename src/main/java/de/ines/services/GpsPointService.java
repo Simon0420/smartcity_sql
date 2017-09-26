@@ -42,23 +42,7 @@ public class GpsPointService {
     SessionFactory sessionFactory;
     Session session;
 
-
-    public GpsPoint searchGpsPointByRealID(int id){
-        return gpsPointRepository.findByRealID(id);
-    }
-
     public void saveGpsPoint(GpsPoint gpsPoint){
-        //gpsPointRepository.insertGPSPoint(gpsPoint.acceleration,gpsPoint.latitude, gpsPoint.longitude, gpsPoint.heading,gpsPoint.speed,gpsPoint.date,1);
-        //gpsPointRepository.save(gpsPoint);
-        /*gpsPointRepository.save(new GpsPoint(gpsPoint.getDate(),
-                gpsPoint.getLatitude(),
-                gpsPoint.getLongitude(),
-                gpsPoint.getHeading(),
-                gpsPoint.getSpeed(),
-                gpsPoint.getAcceleration(),
-                wktToGeometry("POINT("+gpsPoint.getLatitude()+" "+gpsPoint.getLongitude()+")"),
-                gpsPoint.getRoute(),1));*/
-
         String querystring = "INSERT INTO gps_point (location, latitude, longitude, heading, speed, acceleration, date, route_id)"
                 + "VALUES ("+
                 "ST_SetSRID(ST_MakePoint("+gpsPoint.latitude+", "+gpsPoint.longitude+"), 4326),"+
@@ -68,25 +52,11 @@ public class GpsPointService {
                 gpsPoint.speed+", "+
                 gpsPoint.acceleration+", "+
                 gpsPoint.date+", "+
-                1
+                gpsPoint.route.id
                 +")";
-
-
         //perform db operations
         Query q = session.createSQLQuery(querystring);
         q.executeUpdate();
-    }
-
-    public Geometry wktToGeometry(String wktPoint) {
-        WKTReader fromText = new WKTReader();
-        Geometry geom = null;
-        try {
-            geom = fromText.read(wktPoint);
-        } catch (ParseException e) {
-            throw new RuntimeException("Not a WKT string:" + wktPoint);
-        }
-        System.out.println("geo mapping -done");
-        return geom;
     }
 
     public String saveRoute(String jsonRoute){
@@ -123,17 +93,14 @@ public class GpsPointService {
         }
         route.setUser(user);
         userRepository.save(user);
-        Route newR = routeRepository.save(route);
+        route = routeRepository.save(route);
 
-        long id = 0;
-        if(newR.id != null){
-            id = newR.id;
-        }else{
-            id = 0;
+        if(route.id == null){
+            route.setId(1l);
         }
         for(int i = 0; i < route.getRoute().length; i++){
             GpsPoint p = route.getRoute()[i];
-            p.setRoute(newR);
+            p.setRoute(route);
             saveGpsPoint(p);
         }
 
@@ -142,8 +109,8 @@ public class GpsPointService {
 
         //close session
         session.close();
-
-        return "Succesfull";
+        
+        return "succesfull";
     }
 
     public List<GpsPoint> withinDistanceCall(double latitude, double longitude){

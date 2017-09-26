@@ -1,4 +1,4 @@
-package de.ines.queueAlternative;
+package deprecated.queueAlternative;
 
 import com.softwaremill.kmq.*;
 import net.manub.embeddedkafka.EmbeddedKafka$;
