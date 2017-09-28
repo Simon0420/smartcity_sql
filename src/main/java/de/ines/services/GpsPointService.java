@@ -16,6 +16,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +41,10 @@ public class GpsPointService {
     @Autowired
     UserRepository userRepository;
 
-    Configuration config;
-    SessionFactory sessionFactory;
-    Session session;
+    public Configuration config;
+    public SessionFactory sessionFactory;
+    public Session session;
+    public AmqpTemplate template;
 
     public void saveGpsPoint(GpsPoint gpsPoint){
         String querystring = "INSERT INTO gps_point (location, latitude, longitude, heading, speed, acceleration, date, route_id)"
@@ -73,6 +77,7 @@ public class GpsPointService {
         }
 
         Date startTime = new Date();
+
 
         AppUser user = userRepository.findByName("user");
         if(user == null){
@@ -109,12 +114,21 @@ public class GpsPointService {
 
         //close session
         session.close();
-        
+
         return "succesfull";
     }
 
     public List<GpsPoint> withinDistanceCall(double latitude, double longitude){
         return gpsPointRepository.withinDistanceCall(latitude, longitude);
+    }
+
+    public String pushRoute(String jsonRoute){
+        template.convertAndSend("SmartCityQueue",jsonRoute);
+        return "succesfull;";
+    }
+
+    public void receiveMessage(String message){
+        saveRoute(message);
     }
 
 }

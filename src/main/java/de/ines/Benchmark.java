@@ -56,7 +56,7 @@ public class Benchmark {
 
             }
             try {
-                //System.out.println(input);
+                System.out.println(input);
 
                 URL url = new URL("http://localhost:5434/saveRoute");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();

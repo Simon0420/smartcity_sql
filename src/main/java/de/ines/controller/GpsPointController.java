@@ -1,7 +1,22 @@
 package de.ines.controller;
 
 import de.ines.domain.GpsPoint;
+import de.ines.domain.Route;
 import de.ines.services.GpsPointService;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageListener;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +32,18 @@ public class GpsPointController {
     @Autowired
     public GpsPointController(GpsPointService gpsPointService) {
         this.gpsPointService = gpsPointService;
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.setHost("127.0.0.1");
+        cachingConnectionFactory.setPassword("guest");
+        ConnectionFactory connectionFactory = cachingConnectionFactory;
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+        gpsPointService.template = rabbitTemplate;
     }
 
     @RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
     public String saveRoute(@RequestBody String jsonRoute){
-        return gpsPointService.saveRoute(jsonRoute);
+        return gpsPointService.pushRoute(jsonRoute);
     }
 
     @RequestMapping(value="/withinDistanceCall", method = RequestMethod.GET)
