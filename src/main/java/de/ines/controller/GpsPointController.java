@@ -27,19 +27,9 @@ import java.util.Map;
 
 @RestController
 public class GpsPointController {
-    final GpsPointService gpsPointService;
 
     @Autowired
-    public GpsPointController(GpsPointService gpsPointService) {
-        this.gpsPointService = gpsPointService;
-        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setHost("127.0.0.1");
-        cachingConnectionFactory.setPassword("guest");
-        ConnectionFactory connectionFactory = cachingConnectionFactory;
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
-        gpsPointService.template = rabbitTemplate;
-    }
+    public GpsPointService gpsPointService;
 
     @RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
     public String saveRoute(@RequestBody String jsonRoute){

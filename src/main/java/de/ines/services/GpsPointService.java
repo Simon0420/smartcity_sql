@@ -20,6 +20,8 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
@@ -41,10 +43,14 @@ public class GpsPointService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    public AmqpTemplate template;
+
     public Configuration config;
     public SessionFactory sessionFactory;
     public Session session;
-    public AmqpTemplate template;
+
+
 
     public void saveGpsPoint(GpsPoint gpsPoint){
         String querystring = "INSERT INTO gps_point (location, latitude, longitude, heading, speed, acceleration, date, route_id)"

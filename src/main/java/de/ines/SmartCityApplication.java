@@ -33,35 +33,8 @@ import java.util.Map;
 @EnableJpaRepositories(basePackages = { "de.ines.repositories" })
 public class SmartCityApplication {
 
-    @Bean
-    Queue queue(){
-        return new Queue("SmartCityQueue", false);
-    }
 
-    @Bean
-    TopicExchange exchange(){
-        return new TopicExchange("SmartCity-Exchange");
-    }
 
-    @Bean
-    Binding binding(Queue queue, TopicExchange topicExchange){
-        return BindingBuilder.bind(queue).to(topicExchange).with("SmartCityQueue");
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter messageListenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames("SmartCityQueue");
-        messageListenerAdapter.setMessageConverter(new Jackson2JsonMessageConverter());
-        container.setMessageListener(messageListenerAdapter);
-        return container;
-    }
-
-    @Bean
-    MessageListenerAdapter listenerAdapter(GpsPointService receiver){
-        return new MessageListenerAdapter(receiver, "receiveMessage");
-    }
 
 
     public static void main(String[] args)
