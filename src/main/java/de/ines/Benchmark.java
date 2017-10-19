@@ -1,5 +1,7 @@
 package de.ines;
 
+import org.springframework.stereotype.Service;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
+@Service
 public class Benchmark {
 
     public void storageBenchmark(){
@@ -23,7 +26,7 @@ public class Benchmark {
         String uniqueID="";
         int routeID = 0;
 
-        int maxPointsProcessed = 500000;
+        int maxPointsProcessed = 10;
         long overallTime = 0;
 
 
@@ -219,8 +222,6 @@ public class Benchmark {
         overallTime+= (endTime.getTime()-startTime.getTime());
         System.out.println((double)overallTime/1000);
     }
-
-
 
 
 

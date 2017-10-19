@@ -33,7 +33,7 @@ public class GpsPointController {
 
     @RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
     public String saveRoute(@RequestBody String jsonRoute){
-        return gpsPointService.pushRoute(jsonRoute);
+        return gpsPointService.upstreamRoute(jsonRoute);
     }
 
     @RequestMapping(value="/withinDistanceCall", method = RequestMethod.GET)

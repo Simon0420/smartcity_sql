@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,9 @@ public class GpsPointService {
 
     @Autowired
     public AmqpTemplate template;
+
+    @Autowired
+    public PostDatabaseStreamService postDatabaseStreamService;
 
     public Configuration config;
     public SessionFactory sessionFactory;
@@ -70,6 +74,7 @@ public class GpsPointService {
     }
 
     public String saveRoute(String jsonRoute){
+        ArrayList<Long> ids = new ArrayList<>();
         if(this.session == null || !this.session.isOpen()) {
             if(session == null){
                 Configuration config = new Configuration();
@@ -113,10 +118,12 @@ public class GpsPointService {
             GpsPoint p = route.getRoute()[i];
             p.setRoute(route);
             saveGpsPoint(p);
+            ids.add(p.id);
         }
+        postDatabaseStreamService.postDatabaseStreamRoute(jsonRoute);
 
         Date endTime = new Date();
-        System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);
+        //System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);
 
         //close session
         session.close();
@@ -128,13 +135,16 @@ public class GpsPointService {
         return gpsPointRepository.withinDistanceCall(latitude, longitude);
     }
 
-    public String pushRoute(String jsonRoute){
-        template.convertAndSend("SmartCityQueue",jsonRoute);
+    public String upstreamRoute(String jsonRoute){
+        template.convertAndSend("SmartCity-Exchange","UpStreamQueue",jsonRoute);
         return "succesfull;";
     }
 
-    public void receiveMessage(String message){
+
+
+    public void upStreamMessage(String message){
         saveRoute(message);
     }
+
 
 }
