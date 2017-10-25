@@ -26,7 +26,7 @@ public class Benchmark {
         String uniqueID="";
         int routeID = 0;
 
-        int maxPointsProcessed = 10;
+        int maxPointsProcessed = 500000;
         long overallTime = 0;
 
 

@@ -1,4 +1,4 @@
-package de.ines;
+package de.ines.Configuration;
 
 import de.ines.domain.GpsPoint;
 import de.ines.services.GpsPointService;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @org.springframework.context.annotation.Configuration
-public class Configuration {
+public class RabbitUpStreamConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -44,53 +44,23 @@ public class Configuration {
         return template;
     }
 
-    @Bean
-    @Primary
-    Queue upStreamQueue(){
-        return new Queue("UpStreamQueue", false);
-    }
 
-    @Bean
-    Queue downStreamQueue(){
-        return new Queue("PostDatabaseStreamQueue", false);
-    }
-
-    @Bean
-    TopicExchange exchange(){
-        return new TopicExchange("SmartCity-Exchange");
-    }
-
-    @Bean
-    TopicExchange exchange1(){
-        return new TopicExchange("SmartCity-Exchange1");
-    }
-
-    @Bean
-    List<Binding> bindings(Queue queue, TopicExchange exchange){
-        return Arrays.asList(BindingBuilder.bind(upStreamQueue()).to(exchange()).with("UpStreamQueue"),
-                BindingBuilder.bind(downStreamQueue()).to(exchange1()).with("PostDatabaseStreamQueue"));
-    }
 
 
     @Bean
-    public SimpleMessageListenerContainer container(MessageListenerAdapter messageListenerAdapter) {
+    public SimpleMessageListenerContainer container(GpsPointService gpsPointService) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory());
-        container.setQueueNames("UpStreamQueue", "PostDatabaseStreamQueue");
+        container.setQueueNames("UpStreamQueue");
+        MessageListenerAdapter messageListenerAdapter = upStreamListenerAdapter(gpsPointService);
         messageListenerAdapter.setMessageConverter(new Jackson2JsonMessageConverter());
         container.setMessageListener(messageListenerAdapter);
         return container;
     }
 
     @Bean
-    @Primary
     MessageListenerAdapter upStreamListenerAdapter(GpsPointService receiver){
         return new MessageListenerAdapter(receiver, "upStreamMessage");
-    }
-
-    @Bean
-    MessageListenerAdapter downStreamListenerAdapter(PostDatabaseStreamService receiver){
-        return new MessageListenerAdapter(receiver, "postDatabaseStreamMessage");
     }
 
 
