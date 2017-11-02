@@ -5,6 +5,8 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class PostDatabaseStreamService {
 
@@ -14,11 +16,12 @@ public class PostDatabaseStreamService {
     @Autowired
     private FanoutExchange fanout;
 
-    public void postDatabaseStreamRoute(String message){
+    public void postDatabaseStreamRoute(ArrayList<Integer> message){
         template.convertAndSend(fanout.getName(),"", message);
     }
 
-    public void postDatabaseStreamMessage(String message){
+    public void postDatabaseStreamMessage(ArrayList<Integer> message){
+        System.out.println(message);
     }
 
 }

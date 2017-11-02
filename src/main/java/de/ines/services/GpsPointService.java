@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import scala.Int;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
@@ -74,7 +75,7 @@ public class GpsPointService {
     }
 
     public String saveRoute(String jsonRoute){
-        ArrayList<Long> ids = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
         if(this.session == null || !this.session.isOpen()) {
             if(session == null){
                 Configuration config = new Configuration();
@@ -118,9 +119,9 @@ public class GpsPointService {
             GpsPoint p = route.getRoute()[i];
             p.setRoute(route);
             saveGpsPoint(p);
-            ids.add(p.id);
+            ids.add(p.realID);
         }
-        postDatabaseStreamService.postDatabaseStreamRoute(jsonRoute);
+        postDatabaseStreamService.postDatabaseStreamRoute(ids);
 
         Date endTime = new Date();
         //System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);

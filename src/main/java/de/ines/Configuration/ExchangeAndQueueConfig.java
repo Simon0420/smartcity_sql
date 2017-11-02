@@ -20,11 +20,6 @@ public class ExchangeAndQueueConfig {
     }
 
     @Bean
-    Queue postDatabaseStreamQueue1(){
-        return new Queue("PostDatabaseStreamQueue1", false);
-    }
-
-    @Bean
     TopicExchange exchange(){
         return new TopicExchange("SmartCity-Exchange");
     }
@@ -38,8 +33,6 @@ public class ExchangeAndQueueConfig {
     List<Binding> bindings(){
         return Arrays.asList(BindingBuilder.bind(upStreamQueue()).to(exchange()).with("UpStreamQueue"),
                 //BindingBuilder.bind(postDatabaseStreamQueue()).to(exchange1()).with("PostDatabaseStreamQueue"));
-                BindingBuilder.bind(postDatabaseStreamQueue()).to(exchange1()),
-                BindingBuilder.bind(postDatabaseStreamQueue1()).to(exchange1()));
-
+                BindingBuilder.bind(postDatabaseStreamQueue()).to(exchange1()));
     }
 }
