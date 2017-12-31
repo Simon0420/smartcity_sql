@@ -35,8 +35,6 @@ public class SmartCityApplication {
 
 
 
-
-
     public static void main(String[] args)
     {
         SpringApplication.run(SmartCityApplication.class, args);

@@ -16,10 +16,18 @@ public class PostDatabaseStreamService {
     @Autowired
     private FanoutExchange fanout;
 
+    /**
+     * Method being called whenever the FanoutExchange (connected to the PostDatabaseStreamService class) is triggered.
+     * @param message
+     */
     public void postDatabaseStreamRoute(ArrayList<Integer> message){
         template.convertAndSend(fanout.getName(),"", message);
     }
 
+    /**
+     * Method being called whenever the FanoutExchange (connected to the PostDatabaseStreamService class) is triggered.
+     * @param message
+     */
     public void postDatabaseStreamMessage(ArrayList<Integer> message){
         System.out.println(message);
     }

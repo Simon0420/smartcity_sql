@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @RestController
 public class GpsPointController {

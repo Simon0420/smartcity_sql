@@ -21,6 +21,11 @@
         <property name="hibernate.connection.password">
             ines
         </property>
-
     </session-factory>
+
+
+
+
+
+
 </hibernate-configuration>

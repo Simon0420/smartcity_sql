@@ -28,6 +28,8 @@ import scala.Int;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,6 +81,7 @@ public class GpsPointService {
         if(this.session == null || !this.session.isOpen()) {
             if(session == null){
                 Configuration config = new Configuration();
+
                 config.configure();
                 this.sessionFactory = config.buildSessionFactory();
                 this.session = sessionFactory.openSession();

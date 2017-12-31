@@ -20,6 +20,11 @@ import java.util.List;
 @org.springframework.context.annotation.Configuration
 public class RabbitUpStreamConfig {
 
+    /**
+     * Bean to create a ConnectionFactory that handles the "Upstream - Queue". Credentials and connection - name
+     * are set here.
+     * @return
+     */
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
@@ -33,6 +38,12 @@ public class RabbitUpStreamConfig {
         return new RabbitAdmin(connectionFactory());
     }
 
+    /**
+     * Bean to create a RabbitTemplate. Credentials and connection - name of the corresponding ConnectionFactory Bean are used.
+     * The name of the RoutingKey (UpStreamQueue in this case) is set, as well as the MessageConverter (Jackson2Json to allow
+     * the use of Json - Strings as messages.
+     * @return
+     */
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
@@ -45,8 +56,12 @@ public class RabbitUpStreamConfig {
     }
 
 
-
-
+    /**
+     * A Container that listens on the defined Queue (UpStreamQueue in this case) and call a specific function defined in the
+     * MessageListener.
+     * @param gpsPointService The Service which's listener Method is called.
+     * @return
+     */
     @Bean
     public SimpleMessageListenerContainer container(GpsPointService gpsPointService) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
@@ -58,6 +73,12 @@ public class RabbitUpStreamConfig {
         return container;
     }
 
+    /**
+     * Bean to create a MessageListenerAdapter that is later used in the SimpleMessageListenerContainer Bean. It simply defines
+     * the service and a method in the service that will be called if a rabbit queue sends a "listening" signal to the SimpleMessageListenerContainer
+     * @param receiver The Service which's listener Method is called.
+     * @return
+     */
     @Bean
     MessageListenerAdapter upStreamListenerAdapter(GpsPointService receiver){
         return new MessageListenerAdapter(receiver, "upStreamMessage");
