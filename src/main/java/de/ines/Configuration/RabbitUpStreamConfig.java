@@ -1,8 +1,6 @@
 package de.ines.Configuration;
 
-import de.ines.domain.GpsPoint;
 import de.ines.services.GpsPointService;
-import de.ines.services.PostDatabaseStreamService;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -12,10 +10,6 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-
-import java.util.Arrays;
-import java.util.List;
 
 @org.springframework.context.annotation.Configuration
 public class RabbitUpStreamConfig {
@@ -27,9 +21,9 @@ public class RabbitUpStreamConfig {
      */
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("134.155.49.88:15672");
+        connectionFactory.setUsername("ines");
+        connectionFactory.setPassword("ines");
         return connectionFactory;
     }
 

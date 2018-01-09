@@ -28,12 +28,10 @@ import scala.Int;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class GpsPointService {
@@ -76,6 +74,15 @@ public class GpsPointService {
         q.executeUpdate();
     }
 
+    long getRequestRouteId(Long uniqueId){
+        Query selectQuery;
+        String queryString = "Select id FROM route WHERE uniqueid = "+uniqueId+";";
+        selectQuery = session.createSQLQuery(queryString);
+        List list = selectQuery.list();
+        BigInteger id = (BigInteger) list.get(0);
+        return id.intValue();
+    }
+
     public String saveRoute(String jsonRoute){
         ArrayList<Integer> ids = new ArrayList<>();
         if(this.session == null || !this.session.isOpen()) {
@@ -113,8 +120,11 @@ public class GpsPointService {
         }
         route.setUser(user);
         userRepository.save(user);
+        Random random = new Random();
+        route.uniqueid = random.nextLong();
         route = routeRepository.save(route);
-
+        route.id = getRequestRouteId(route.uniqueid);
+                
         if(route.id == null){
             route.setId(1l);
         }
@@ -124,7 +134,7 @@ public class GpsPointService {
             saveGpsPoint(p);
             ids.add(p.realID);
         }
-        postDatabaseStreamService.postDatabaseStreamRoute(ids);
+        postDatabaseStreamService.postDatabaseStreamRoute(route.id);
 
         Date endTime = new Date();
         //System.out.println((double)(endTime.getTime()-startTime.getTime())/1000);

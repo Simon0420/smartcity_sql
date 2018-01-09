@@ -5,8 +5,6 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 @Service
 public class PostDatabaseStreamService {
 
@@ -20,16 +18,8 @@ public class PostDatabaseStreamService {
      * Method being called whenever the FanoutExchange (connected to the PostDatabaseStreamService class) is triggered.
      * @param message
      */
-    public void postDatabaseStreamRoute(ArrayList<Integer> message){
+    public void postDatabaseStreamRoute(Long message){
         template.convertAndSend(fanout.getName(),"", message);
-    }
-
-    /**
-     * Method being called whenever the FanoutExchange (connected to the PostDatabaseStreamService class) is triggered.
-     * @param message
-     */
-    public void postDatabaseStreamMessage(ArrayList<Integer> message){
-        System.out.println(message);
     }
 
 }
