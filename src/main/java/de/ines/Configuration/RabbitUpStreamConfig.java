@@ -21,9 +21,9 @@ public class RabbitUpStreamConfig {
      */
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("134.155.49.88:15672");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
         connectionFactory.setUsername("ines");
-        connectionFactory.setPassword("ines");
+        connectionFactory.setPassword("mtp123456");
         return connectionFactory;
     }
 

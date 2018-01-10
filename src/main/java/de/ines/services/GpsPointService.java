@@ -124,7 +124,7 @@ public class GpsPointService {
         route.uniqueid = random.nextLong();
         route = routeRepository.save(route);
         route.id = getRequestRouteId(route.uniqueid);
-                
+
         if(route.id == null){
             route.setId(1l);
         }
