@@ -26,7 +26,7 @@ public class Benchmark {
         String uniqueID="";
         int routeID = 0;
 
-        int maxPointsProcessed = 500000;
+        int maxPointsProcessed = 5000;
         long overallTime = 0;
 
 
@@ -35,10 +35,7 @@ public class Benchmark {
             Date startTime = new Date();
             routeID++;
 
-
             for (int i = 0; i < routeLength; i++) {
-
-
                 name = Long.toHexString(Double.doubleToLongBits(Math.random()));
                 UUID.randomUUID().toString();
                 latitude ++;//= random.nextDouble();
@@ -55,8 +52,6 @@ public class Benchmark {
                     input += "{\"latitude\":" + latitude + ",\"longitude\":" + longitude + ",\"date\":" + date + ",\"heading\":" + heading + ",\"speed\":" + speed + ",\"acceleration\":" + acceleration +"}]}";
 
                 }
-
-
             }
             try {
                 System.out.println(input);
@@ -167,14 +162,7 @@ public class Benchmark {
         overallTime+= (endTime.getTime()-startTime.getTime());
         System.out.println("Number of GpsPoints Processed: "+maxPointsProcessed+"Number of Left Points to be Processed: "+maxPointsProcessed+" Time consumed by Database: "+(double)(endTime.getTime()-startTime.getTime())/1000);
         System.out.println((double)overallTime/1000);
-        maxPointsProcessed-=maxPointsProcessed;
-        input = "{ \n" +
-                "\t\"route\":[";
     }
-
-
-
-
 
     private void distanceBenchmark() throws Exception {
         Date startTime = new Date();
@@ -184,14 +172,12 @@ public class Benchmark {
         int distance = 0;
         long overallTime = 0;
 
-
         Random random = new Random();
         latitude = random.nextDouble();
         longitude = random.nextDouble();
         distance = random.nextInt(400);
 
         //System.out.println(input);
-
         URL url = new URL("http://localhost:5434/withinDistanceCall?latitude="+latitude+"&longitude="+longitude);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -199,7 +185,6 @@ public class Benchmark {
         con.setRequestMethod("GET");
 
         //add request header
-
         int responseCode = con.getResponseCode();
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
